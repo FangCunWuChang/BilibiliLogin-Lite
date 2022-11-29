@@ -38,7 +38,6 @@ class SmsLoginWindow(TopWindow):
         super(SmsLoginWindow, self).__init__("短信登陆", "300x130")
 
         self.captcha_key = None
-        self.buvid = buvid
 
         self.login = SmsLogin(versions, system, buvid)
 
@@ -50,7 +49,7 @@ class SmsLoginWindow(TopWindow):
 
         for name, func in sms_login_func:
             config = sms_login_button_settings[name]
-            TkinterButton(self, config, partial(func, self))
+            TkinterButton(self, config, partial(func, self, buvid))
 
 
 password_login_func = [
@@ -62,8 +61,6 @@ class PasswordLoginWindow(TopWindow):
     def __init__(self, versions, system, buvid):
         super(PasswordLoginWindow, self).__init__("账密登陆", "300x130")
 
-        self.buvid = buvid
-
         self.login = PasswordLogin(versions, system, buvid)
 
         for label_config in password_login_label_settings:
@@ -74,4 +71,4 @@ class PasswordLoginWindow(TopWindow):
 
         for name, func in password_login_func:
             config = password_login_button_settings[name]
-            TkinterButton(self, config, partial(func, self))
+            TkinterButton(self, config, partial(func, self, buvid))

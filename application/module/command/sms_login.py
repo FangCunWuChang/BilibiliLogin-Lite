@@ -20,7 +20,7 @@ from geetest.geetest import GeeTest
 
 @application_thread
 @application_error
-def sms_send_verify_code(master) -> None:
+def sms_send_verify_code(master, _) -> None:
     tel_number = master["tel_number_entry"].value("未输入手机号")
     tel_number = tel_number.replace(" ", "")
     if not tel_number.isdigit():
@@ -73,7 +73,7 @@ def sms_send_verify_code(master) -> None:
 
 @application_thread
 @application_error
-def sms_login_login(master):
+def sms_login_login(master, buvid):
     if not master.captcha_key:
         showinfo("提示", "未成功发送验证码")
         return
@@ -103,7 +103,7 @@ def sms_login_login(master):
         message = login_res.json()["message"]
         raise ResponseError(message)
 
-    access_key, cookie = extractCookie(login_res.json(), master.buvid)
+    access_key, cookie = extractCookie(login_res.json(), buvid)
 
     mid = parse_cookies(cookie)["DedeUserID"]
     type_ = [("json", "*.json")]

@@ -1,3 +1,5 @@
+from application.errors import GuiValueError
+
 from application.net.utils import get_versions
 from application.utils import reader
 
@@ -56,3 +58,14 @@ class App(tkinter.Tk, AppDeviceInfo):
         for name, func in main_func_list:
             config = main_button_settings[name]
             TkinterButton(self, config, partial(func, self))
+
+    def __setitem__(self, key: str, value) -> any:
+        """ 设置 """
+        return setattr(self, str(key), value)
+
+    def __getitem__(self, item: str):
+        """ 取得 """
+        value = getattr(self, str(item), None)
+        if value is None:
+            raise GuiValueError(f"不存在{item}")
+        return value

@@ -28,16 +28,18 @@ class SettingDeviceWindow(TopWindow):
     def __init__(self, master):
         super(SettingDeviceWindow, self).__init__("设备信息", "500x170")
 
+        self.main_master = master
+
         for label_config in setting_label_settings:
             TkinterLabel(self, label_config)
 
         for name, config in setting_entry_settings.items():
             self[f"{name}_entry"] = TkinterEntry(self, config)
 
-        for name, func in setting_func_list:
-            config = setting_button_settings[name]
-            TkinterButton(self, config, partial(func, self))
-
         device = get_all_value(master, "Device_", [], True)
         for name, value in device.items():
             self[f"{name}_entry"].writer(value)
+
+        for name, func in setting_func_list:
+            config = setting_button_settings[name]
+            TkinterButton(self, config, partial(func, self))

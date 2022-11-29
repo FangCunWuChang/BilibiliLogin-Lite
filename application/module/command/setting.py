@@ -22,6 +22,6 @@ def random_buvid(master) -> None:
 def save_apply(master) -> None:
     device_dict = get_all_value(master, "_entry", [])
     for name, value in device_dict.items():
-        master[f"Device_{name}"] = value
+        master.main_master[f"Device_{name}"] = value
 
     writer("./device.json", device_dict)

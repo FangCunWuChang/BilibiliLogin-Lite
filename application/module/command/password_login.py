@@ -61,7 +61,7 @@ class InputWindow(TopWindow):
 
 @application_thread
 @application_error
-def password_login_login(master) -> None:
+def password_login_login(master, buvid) -> None:
     username = master["username_entry"].value("未输入账号")
     password = master["password_entry"].value("未输入密码")
 
@@ -143,7 +143,7 @@ def password_login_login(master) -> None:
             message = res_login.json()["message"]
             raise ResponseError(message)
 
-    access_key, cookie = extractCookie(res_login.json(), master.buvid)
+    access_key, cookie = extractCookie(res_login.json(), buvid)
     mid = parse_cookies(cookie)["DedeUserID"]
     type_ = [("json", "*.json")]
     save_path = asksaveasfile("保存登陆数据", type_, f"{mid}.json")
