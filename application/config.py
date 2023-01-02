@@ -22,3 +22,7 @@ password_login_button_settings = reader("./settings/controls/password_login/butt
 password_verify_label_settings = reader("./settings/controls/password_verify/label.json")
 password_verify_entry_settings = reader("./settings/controls/password_verify/entry.json")
 password_verify_button_settings = reader("./settings/controls/password_verify/button.json")
+
+
+chromedriver_index_url = reader("./settings/net/chromedriver.json").get("url")
+chromedriver_download_url = reader("./settings/net/chromedriver.json").get("url2")
