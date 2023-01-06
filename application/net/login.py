@@ -3,8 +3,7 @@ from urllib.parse import urlencode
 from application.net.session import Session
 
 from application.utils import (
-    LOGIN_SIGN, sortedFormData, addSign,
-    rsaPassword, build_x_bili_trace_id, FormData
+    LOGIN_SIGN, rsaPassword, build_x_bili_trace_id, FormData
 )
 
 from application.module.decoration import application_error
