@@ -1,6 +1,0 @@
-[
-    {
-        "self": {"text": "验证码", "font": ["Microsoft YaHei", 18]},
-        "place": {"width": 75, "height": 30, "x": 10, "y": 10}
-    }
-]
