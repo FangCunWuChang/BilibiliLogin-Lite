@@ -107,15 +107,6 @@ def extractCookie(response_json: dict, buvid) -> tuple[str, str]:
 LOGIN_SIGN = ("783bbb7264451d82", "2653583c8873dea268ab9386918b1d65")
 
 
-def addSign(form_data: dict, key_and_sec=LOGIN_SIGN) -> dict:
-    """ 添加sign """
-    text = urlencode(form_data) + key_and_sec[1]
-    hashlib_md5 = hashlib.md5()
-    hashlib_md5.update(text.encode())
-    form_data.update({"sign": hashlib_md5.hexdigest()})
-    return form_data
-
-
 def urlQuerySplit(url: str) -> dict:
     """ 分割url query参数 """
     data: list[str] = urlsplit(url).query.split("&")
@@ -124,15 +115,6 @@ def urlQuerySplit(url: str) -> dict:
         i = li.split("=")
         query_dict[i[0]] = "" if len(i) == 1 else unquote(i[1])
     return query_dict
-
-
-def sortedFormData(form_data: dict):
-    """ 表单排序 """
-    return_form_data = dict()
-    form_data_keys = sorted(form_data)
-    for key in form_data_keys:
-        return_form_data[key] = form_data[key]
-    return return_form_data
 
 
 def parse_cookies(cookies_content: str) -> dict:
