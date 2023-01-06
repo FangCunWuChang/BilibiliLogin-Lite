@@ -2,7 +2,6 @@ from application.module.decoration import application_error
 
 from application.utils import urlQuerySplit
 
-from selenium.webdriver.chrome.service import Service
 from urllib.parse import urlsplit
 from selenium import webdriver
 import base64
@@ -17,8 +16,7 @@ class GeeTest(object):
         """ 还得是selenium """
         super(GeeTest, self).__init__()
 
-        service = Service(os.path.abspath("geetest/chromedriver.exe"))
-        self.driver = webdriver.Chrome(service=service)
+        self.driver = webdriver.Chrome(os.path.abspath("geetest/chromedriver.exe"))
         gee_html = os.path.abspath("./geetest/template/index.html")
         self.driver.get(gee_html + f"?gt={gt}&challenge={challenge}")
 
