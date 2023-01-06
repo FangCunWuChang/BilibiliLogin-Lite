@@ -1,63 +1,33 @@
-from application.errors import GuiValueError
+import tkinter
 
-from application.net.utils import get_versions
-from application.utils import reader
-
-from application.config import main_button_settings
-
-from application.module.controls import TkinterButton
-
-from application.module.command.main import (
-    setting_device, sms_login, password_login
+from application.utils import read_device_content
+from application.errors import GuiItemNotExist
+from application.items import (
+    TkinterEntry,
+    TkinterLabel
+)
+from application.config import (
+    AppConfig, EntryConfig, LabelConfig,
+    ButtonConfig, config_base_app,
+    config_controls_app_SmsLogin_button,
+    config_controls_app_PasswordLogin_button,
+    config_controls_app_SettingDevice_button
+)
+from application.module.command.app import (
+    AppCommandSmsLogin,
+    AppCommandPasswordLogin,
+    AppCommandDeviceSetting
 )
 
-from functools import partial
-import tkinter
-import os
 
-
-main_func_list = [
-    ("sms_login", sms_login),
-    ("password_login", password_login),
-    ("setting_device", setting_device)
-]
-
-
-class AppDeviceInfo(object):
-    def __init__(self):
-        """ 设备信息 """
-        super(AppDeviceInfo, self).__init__()
-        self.Device_Buvid = ""
-        self.Device_AndroidModel = ""
-        self.Device_AndroidBuild = ""
-
-        code, name = get_versions()
-
-        self.Device_VersionName = str(name)
-        self.Device_VersionCode = str(code)
-
-        if os.path.exists("./device.json"):
-            device = reader("./device.json")
-            self.Device_Buvid = device.get("Buvid", "")
-            self.Device_AndroidModel = device.get("AndroidModel", "")
-            self.Device_AndroidBuild = device.get("AndroidBuild", "")
-            self.Device_VersionName = device.get("VersionName", "")
-            self.Device_VersionCode = device.get("VersionCode", "")
-
-
-class App(tkinter.Tk, AppDeviceInfo):
-    def __init__(self):
+class App(tkinter.Tk):
+    def __init__(self, config: AppConfig):
         super(App, self).__init__()
-        AppDeviceInfo.__init__(self)
 
-        self.title("登陆")
-        self.configure(background="#f0f0f0")
-        self.resizable(False, False)
-        self.geometry("200x130")
-
-        for name, func in main_func_list:
-            config = main_button_settings[name]
-            TkinterButton(self, config, partial(func, self))
+        self.title(config.title)
+        self.configure(background=config.bg)
+        self.resizable(*config.resizable)
+        self.geometry(config.geometry)
 
     def __setitem__(self, key: str, value) -> any:
         """ 设置 """
@@ -67,5 +37,29 @@ class App(tkinter.Tk, AppDeviceInfo):
         """ 取得 """
         value = getattr(self, str(item), None)
         if value is None:
-            raise GuiValueError(f"不存在{item}")
+            raise GuiItemNotExist(f"找不到{item}")
         return value
+
+    def loadButton(self, command: any, config: ButtonConfig):
+        command(self, config)
+
+    def loadEntry(self, item_name: str, config: EntryConfig):
+        self[item_name] = TkinterEntry(self, config=config)
+
+    def loadLabel(self, config: LabelConfig):
+        TkinterLabel(self, config=config)
+
+
+device_content = read_device_content()
+
+app = App(config_base_app)
+
+app["Device_BilibiliBuvid"] = device_content.get("BilibiliBuvid", "")
+app["Device_AndroidModel"] = device_content.get("AndroidModel", "")
+app["Device_AndroidBuild"] = device_content.get("AndroidBuild", "")
+app["Device_VersionName"] = device_content.get("VersionName", "")
+app["Device_VersionCode"] = device_content.get("VersionCode", "")
+
+app.loadButton(AppCommandSmsLogin, config_controls_app_SmsLogin_button)
+app.loadButton(AppCommandPasswordLogin, config_controls_app_PasswordLogin_button)
+app.loadButton(AppCommandDeviceSetting, config_controls_app_SettingDevice_button)

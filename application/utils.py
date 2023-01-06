@@ -1,40 +1,13 @@
-from application.errors import ReaderError, GuiValueIndexWarning
+from application.errors import ReaderError
 
 
-from urllib.parse import urlencode
 from urllib.parse import urlsplit
 from urllib.parse import unquote
-import hashlib
 import base64
 import json
 import uuid
 import rsa
 import os
-
-
-class FormData(dict):
-    def __init__(self, *args, **kwargs):
-        super(FormData, self).__init__(*args, **kwargs)
-
-    @property
-    def sorted(self):
-        """ 排序 """
-        return {k: self[k] for k in sorted(self)}
-
-    def toSign(self, app: tuple[str, str]):
-        """ 计算sign """
-        appkey, appsec = app
-        self.update({"appkey": appkey})
-        form_data = self.sorted
-        text = urlencode(form_data) + appsec
-        hashlib_md5 = hashlib.md5()
-        hashlib_md5.update(text.encode())
-        sign = hashlib_md5.hexdigest()
-        form_data.update({"sign": sign})
-
-        print(form_data)
-
-        return form_data
 
 
 ReaderMode_Setting = "setting"
@@ -54,6 +27,14 @@ def reader(path: str, mode=ReaderMode_Setting) -> list | dict | bytes:
     raise ReaderError(f"{path}无法打开")
 
 
+def read_device_content():
+    """ 打开device.json """
+    default_device_file = "./device.json"
+    if os.path.exists(default_device_file):
+        return reader(default_device_file)
+    return dict()
+
+
 def writer(path: str, data: list | dict | bytes) -> str:
     """ 写入 """
     file_path, file = os.path.split(path)
@@ -66,45 +47,6 @@ def writer(path: str, data: list | dict | bytes) -> str:
         w_file.write(write_data)
     w_file.close()
     return os.path.abspath(path)
-
-
-def get_all_value(master, wkey: str, no_items: list, reverse=False) -> dict:
-    """
-    获取所有内容
-    no_items 不抛出异常的值
-    reverse 反向选择 不抛出异常的值
-    """
-    entry_dict, return_dict = dict(), dict()
-    for key, value in master.__dict__.items():
-        if wkey in key:
-            entry_dict[key.replace(wkey, "")] = value
-    if reverse:
-        reverse_no_items = list(entry_dict.keys())
-        for li in no_items:
-            reverse_no_items.remove(li)
-        no_items = reverse_no_items
-    for key, entry in entry_dict.items():
-        err = False if key in no_items else f"{key}未填写"
-        if "_entry" in wkey:
-            return_dict[key] = entry.value(err)
-        else:
-            if entry is None and err:
-                raise GuiValueIndexWarning(err)
-            return_dict[key] = entry
-    return return_dict
-
-
-def extractCookie(response_json: dict, buvid) -> tuple[str, str]:
-    """ 提取 accessKey 和 cookie """
-    access_key = str(response_json["data"]["token_info"]["access_token"])
-    cookie_list = response_json["data"]["cookie_info"]["cookies"]
-    cookie_dict = {li["name"]: li["value"] for li in cookie_list}
-    cookie_dict.update({"Buvid": str(buvid)})
-    cookie_list = [f"{k}={v}" for k, v in cookie_dict.items()]
-    return access_key, "; ".join(cookie_list)
-
-
-LOGIN_SIGN = ("783bbb7264451d82", "2653583c8873dea268ab9386918b1d65")
 
 
 def urlQuerySplit(url: str) -> dict:

@@ -1,11 +1,37 @@
 import os
 import zipfile
+import hashlib
+from urllib.parse import urlencode
 
 from application.net.session import Session
 from application.config import (
-    default_net_config, chromedriver_index_url,
+    default_net_config,
+    chromedriver_index_url,
     chromedriver_download_url
 )
+
+
+class FormData(dict):
+    """ 表单 """
+    def __init__(self, *args, **kwargs):
+        super(FormData, self).__init__(*args, **kwargs)
+
+    @property
+    def sorted(self):
+        """ 排序 """
+        return {k: self[k] for k in sorted(self)}
+
+    def toSign(self, app: tuple[str, str]):
+        """ 计算sign """
+        appkey, appsec = app
+        self.update({"appkey": appkey})
+        form_data = self.sorted
+        text = urlencode(form_data) + appsec
+        hashlib_md5 = hashlib.md5()
+        hashlib_md5.update(text.encode())
+        sign = hashlib_md5.hexdigest()
+        form_data.update({"sign": sign})
+        return form_data
 
 
 def get_versions(mod: str = "android") -> tuple[str, str]:
@@ -28,7 +54,7 @@ def download_chromedriver(version: str):
     content_length = res.headers.get("content-length")
     now_content_length = 0
     with open("geetest/chromedriver.zip", "wb") as f:
-        for content in res.iter_bytes(4096):
+        for content in res.iter_content(4096):
             f.write(content)
             now_content_length += len(content)
             print(f"正在下载:{now_content_length}/{content_length}")
@@ -45,7 +71,7 @@ def download_chromedriver(version: str):
     return os.path.abspath("geetest/chromedriver.exe")
 
 
-def get_chromedriver_list():
+def get_chromedriver_list() -> list[str]:
     """ 获取版本列表 """
     with Session(**default_net_config) as session:
         res = session.request("GET", chromedriver_index_url)

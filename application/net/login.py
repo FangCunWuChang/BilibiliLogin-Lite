@@ -1,14 +1,17 @@
 from urllib.parse import urlencode
 
 from application.net.session import Session
+from application.net.utils import FormData
 
 from application.utils import (
-    LOGIN_SIGN, rsaPassword, build_x_bili_trace_id, FormData
+    rsaPassword, build_x_bili_trace_id
 )
 
 from application.module.decoration import application_error
 
-from application.config import login_config
+from application.config import login_config, LOGIN_SIGN_Android
+
+from geetest.geetest import GeeTestContent
 
 import time
 
@@ -23,7 +26,7 @@ class SmsLogin(object):
         self.statistics, self.buvid = statistics % (self.name,), buvid
 
     @application_error
-    def sms_send(self, cid: str, tel: str, **kwargs):
+    def sms_send(self, cid: str, tel: str, gee: GeeTestContent | dict):
         headers: dict = login_config["sms_send"]["headers"]
         headers.update({"Buvid": str(self.buvid)})
         user_agent = headers["User-Agent"].format(
@@ -48,8 +51,8 @@ class SmsLogin(object):
             "statistics": self.statistics,
             "tel": tel,
             "ts": ts,
-            **kwargs
-        }).toSign(LOGIN_SIGN)
+            **(gee.content if gee else dict())
+        }).toSign(LOGIN_SIGN_Android)
 
         data = urlencode(form_data)
 
@@ -89,7 +92,7 @@ class SmsLogin(object):
             "statistics": self.statistics,
             "tel": tel,
             "ts": ts
-        }).toSign(LOGIN_SIGN)
+        }).toSign(LOGIN_SIGN_Android)
 
         data = urlencode(form_data)
 
@@ -136,7 +139,7 @@ class PasswordLogin(object):
             "platform": "android",
             "statistics": self.statistics,
             "ts": ts
-        }).toSign(LOGIN_SIGN)
+        }).toSign(LOGIN_SIGN_Android)
 
         params = urlencode(params_data)
 
@@ -175,7 +178,7 @@ class PasswordLogin(object):
             "statistics": self.statistics,
             "ts": ts,
             "username": username
-        }).toSign(LOGIN_SIGN)
+        }).toSign(LOGIN_SIGN_Android)
 
         data = urlencode(form_data)
 
@@ -204,7 +207,7 @@ class PasswordLogin(object):
             "disable_rcmd": "0",
             "statistics": self.statistics,
             "ts": ts
-        }).toSign(LOGIN_SIGN)
+        }).toSign(LOGIN_SIGN_Android)
 
         data = urlencode(form_data)
 
@@ -218,7 +221,7 @@ class PasswordLogin(object):
         return res
 
     @application_error
-    def sms_send(self, tmp_code: str, **kwargs):
+    def sms_send(self, tmp_code: str, gee: GeeTestContent):
         headers: dict = login_config["password_sms_send"]["headers"]
         user_agent = headers["User-Agent"].format(
             MODEL=self.model, OSVER=self.os_ver,
@@ -236,8 +239,8 @@ class PasswordLogin(object):
             "statistics": self.statistics,
             "tmp_code": tmp_code,
             "ts": ts,
-            **kwargs
-        }).toSign(LOGIN_SIGN)
+            **gee.content
+        }).toSign(LOGIN_SIGN_Android)
 
         data = urlencode(form_data)
 
@@ -268,7 +271,7 @@ class PasswordLogin(object):
             "statistics": self.statistics,
             "tmp_code": tmp_code,
             "ts": ts
-        }).toSign(LOGIN_SIGN)
+        }).toSign(LOGIN_SIGN_Android)
 
         params = urlencode(params_data)
 
@@ -281,7 +284,7 @@ class PasswordLogin(object):
         return res
 
     @application_error
-    def tel_verify(self, tmp_code: str, captcha_key: str, code: str | int, **kwargs):
+    def tel_verify(self, tmp_code: str, captcha_key: str, code: str, **kwargs):
         headers: dict = login_config["password_sms_send"]["headers"]
         user_agent = headers["User-Agent"].format(
             MODEL=self.model, OSVER=self.os_ver,
@@ -306,7 +309,7 @@ class PasswordLogin(object):
             "ts": ts,
             "type": "loginTelCheck",
             **kwargs
-        }).toSign(LOGIN_SIGN)
+        }).toSign(LOGIN_SIGN_Android)
 
         data = urlencode(form_data)
 
@@ -345,7 +348,7 @@ class PasswordLogin(object):
             "platform": "android",
             "statistics": self.statistics,
             "ts": ts
-        }).toSign(LOGIN_SIGN)
+        }).toSign(LOGIN_SIGN_Android)
 
         data = urlencode(form_data)
 
