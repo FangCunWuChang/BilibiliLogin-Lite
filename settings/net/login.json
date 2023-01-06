@@ -1,15 +1,122 @@
 {
-  "trust_env": false,
-  "proxies": null,
-  "timeout": 5,
-  "user_agent": "Mozilla/5.0 BiliDroid/{NAME} (bbcallen@gmail.com) os/android model/{MODEL} mobi_app/android build/{CODE} channel/{CHANNEL} innerVer/{CODE} osVer/{OSVER} network/2",
-  "channel": "alifenfa",
-  "headers": {
-    "Accept-Encoding": "gzip",
-    "APP-KEY": "android",
-    "x-bili-mid": "",
-    "x-bili-aurora-eid": "",
-    "x-bili-aurora-zone": "",
-    "env": "prod"
+  "main": {
+    "trust_env": false,
+    "proxies": null
+  },
+  "sms_send": {
+    "headers": {
+      "Accept-Encoding": "gzip",
+      "User-Agent": "Mozilla/5.0 BiliDroid/{NAME} (bbcallen@gmail.com) os/android model/{MODEL} mobi_app/android build/{CODE} channel/alifenfa innerVer/{CODE} osVer/{OSVER} network/2",
+      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+      "APP-KEY": "android",
+      "env": "prod",
+      "x-bili-aurora-eid": "",
+      "x-bili-aurora-zone": "",
+      "x-bili-mid": ""
+    }
+  },
+  "login_sms": {
+    "headers": {
+      "Accept-Encoding": "gzip",
+      "User-Agent": "Mozilla/5.0 BiliDroid/{NAME} (bbcallen@gmail.com) os/android model/{MODEL} mobi_app/android build/{CODE} channel/alifenfa innerVer/{CODE} osVer/{OSVER} network/2",
+      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+      "APP-KEY": "android",
+      "env": "prod",
+      "x-bili-aurora-eid": "",
+      "x-bili-aurora-zone": "",
+      "x-bili-mid": ""
+    }
+  },
+  "web_key": {
+    "headers": {
+      "Accept-Encoding": "gzip",
+      "User-Agent": "Mozilla/5.0 BiliDroid/{NAME} (bbcallen@gmail.com) os/android model/{MODEL} mobi_app/android build/{CODE} channel/alifenfa innerVer/{CODE} osVer/{OSVER} network/2",
+      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+      "APP-KEY": "android",
+      "env": "prod",
+      "x-bili-aurora-eid": "",
+      "x-bili-aurora-zone": "",
+      "x-bili-mid": ""
+    }
+  },
+  "oauth2_login": {
+    "headers": {
+      "Accept-Encoding": "gzip",
+      "User-Agent": "Mozilla/5.0 BiliDroid/{NAME} (bbcallen@gmail.com) os/android model/{MODEL} mobi_app/android build/{CODE} channel/alifenfa innerVer/{CODE} osVer/{OSVER} network/2",
+      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+      "APP-KEY": "android",
+      "env": "prod",
+      "x-bili-aurora-eid": "",
+      "x-bili-aurora-zone": "",
+      "x-bili-mid": ""
+    }
+  },
+  "captcha_pre": {
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Accept-Encoding": "gzip",
+      "User-Agent": "Mozilla/5.0 BiliDroid/{NAME} (bbcallen@gmail.com) os/android model/{MODEL} mobi_app/android build/{CODE} channel/alifenfa innerVer/{CODE} osVer/{OSVER} network/2",
+      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+      "APP-KEY": "android",
+      "env": "prod",
+      "native_api_from": "h5",
+      "x-bili-aurora-eid": "",
+      "x-bili-aurora-zone": "",
+      "x-bili-mid": ""
+    }
+  },
+  "password_sms_send": {
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Accept-Encoding": "gzip",
+      "User-Agent": "Mozilla/5.0 BiliDroid/{NAME} (bbcallen@gmail.com) os/android model/{MODEL} mobi_app/android build/{CODE} channel/alifenfa innerVer/{CODE} osVer/{OSVER} network/2",
+      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+      "APP-KEY": "android",
+      "env": "prod",
+      "native_api_from": "h5",
+      "x-bili-aurora-eid": "",
+      "x-bili-aurora-zone": "",
+      "x-bili-mid": ""
+    }
+  },
+  "user_info": {
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Accept-Encoding": "gzip",
+      "User-Agent": "Mozilla/5.0 BiliDroid/{NAME} (bbcallen@gmail.com) os/android model/{MODEL} mobi_app/android build/{CODE} channel/alifenfa innerVer/{CODE} osVer/{OSVER} network/2",
+      "Content-Type": "application/json",
+      "APP-KEY": "android",
+      "env": "prod",
+      "native_api_from": "h5",
+      "x-bili-aurora-eid": "",
+      "x-bili-aurora-zone": "",
+      "x-bili-mid": ""
+    }
+  },
+  "tel_verify": {
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Accept-Encoding": "gzip",
+      "User-Agent": "Mozilla/5.0 BiliDroid/{NAME} (bbcallen@gmail.com) os/android model/{MODEL} mobi_app/android build/{CODE} channel/alifenfa innerVer/{CODE} osVer/{OSVER} network/2",
+      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+      "APP-KEY": "android",
+      "env": "prod",
+      "native_api_from": "h5",
+      "x-bili-aurora-eid": "",
+      "x-bili-aurora-zone": "",
+      "x-bili-mid": ""
+    }
+  },
+  "oauth2_access_token": {
+    "headers": {
+      "Accept-Encoding": "gzip",
+      "User-Agent": "Mozilla/5.0 BiliDroid/{NAME} (bbcallen@gmail.com) os/android model/{MODEL} mobi_app/android build/{CODE} channel/alifenfa innerVer/{CODE} osVer/{OSVER} network/2",
+      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+      "APP-KEY": "android",
+      "env": "prod",
+      "x-bili-aurora-eid": "",
+      "x-bili-aurora-zone": "",
+      "x-bili-mid": ""
+    }
   }
 }

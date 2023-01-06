@@ -84,14 +84,14 @@ def password_login_login(master, buvid) -> None:
         message = res_login.json()["message"]
         raise ResponseError(message)
 
-    status_code = res_login.json()["data"]["status"]
+    if res_login.json()["data"]["status"] != 0:
 
-    if status_code != 0:
-
-        showinfo("提示", res_login.json()["data"]["message"])
+        showinfo("提示", res_login.json()["data"]["message"] or "?")
 
         verify_url = res_login.json()["data"]["url"]
+
         verify_query = urlQuerySplit(verify_url)
+
         tmp_code = verify_query["tmp_token"]
         verify_query.update({"tmp_code": tmp_code})
         verify_query.pop("tmp_token", None)
@@ -131,7 +131,14 @@ def password_login_login(master, buvid) -> None:
         while not code:
             input_win = InputWindow("输入验证码", "300x50")
             verify_code = input_win.results()
-            login_res = master.login.tel_verify(captcha_key, verify_code, **verify_query)
+
+            aa = (tmp_code, captcha_key, verify_code)
+            if "request_id" in verify_code:
+                req = {"request_id": verify_query["request_id"]}
+                login_res = master.login.tel_verify(*aa, **req)
+            else:
+                login_res = master.login.tel_verify(*aa)
+
             if login_res.json()["code"] != 0:
                 showinfo("提示", login_res.json()["message"])
                 continue
@@ -145,7 +152,6 @@ def password_login_login(master, buvid) -> None:
 
     access_key, cookie = extractCookie(res_login.json(), buvid)
     mid = parse_cookies(cookie)["DedeUserID"]
-    type_ = [("json", "*.json")]
-    save_path = asksaveasfile("保存登陆数据", type_, f"{mid}.json")
+    save_path = asksaveasfile("保存登陆数据", [("json", "*.json")], f"{mid}.json")
     writer(save_path, {"accessKey": access_key, "cookie": cookie})
     showinfo("提示", "操作完成")

@@ -7,8 +7,34 @@ from urllib.parse import unquote
 import hashlib
 import base64
 import json
+import uuid
 import rsa
 import os
+
+
+class FormData(dict):
+    def __init__(self, *args, **kwargs):
+        super(FormData, self).__init__(*args, **kwargs)
+
+    @property
+    def sorted(self):
+        """ 排序 """
+        return {k: self[k] for k in sorted(self)}
+
+    def toSign(self, app: tuple[str, str]):
+        """ 计算sign """
+        appkey, appsec = app
+        self.update({"appkey": appkey})
+        form_data = self.sorted
+        text = urlencode(form_data) + appsec
+        hashlib_md5 = hashlib.md5()
+        hashlib_md5.update(text.encode())
+        sign = hashlib_md5.hexdigest()
+        form_data.update({"sign": sign})
+
+        print(form_data)
+
+        return form_data
 
 
 ReaderMode_Setting = "setting"
@@ -122,3 +148,12 @@ def rsaPassword(password: str, rsa_key: str, rsa_hash: str):
     rsa_password = str(rsa_hash + password).encode()
     encrypted_password = rsa.encrypt(rsa_password, pub_key)
     return base64.b64encode(encrypted_password).decode()
+
+
+def build_x_bili_trace_id(sela_time: int) -> str:
+    """ 生成 x-bili-trace-id """
+    back6 = hex(round(sela_time / 256))
+    front = str(uuid.uuid4()).replace("-", "")
+    _data1 = front[6:] + back6[2:]
+    _data2 = front[22:] + back6[2:]
+    return f"{_data1}:{_data2}:0:0"

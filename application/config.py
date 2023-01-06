@@ -2,6 +2,10 @@ from application.utils import reader
 
 default_net_config = reader("./settings/net/default.json")
 login_config = reader("./settings/net/login.json")
+for li in login_config.copy():
+    lili = login_config[li]
+    lili.update(login_config["main"])
+    login_config[li] = lili
 
 main_button_settings = reader("./settings/controls/main/button.json")
 
