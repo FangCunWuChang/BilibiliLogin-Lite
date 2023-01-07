@@ -54,25 +54,6 @@ def download_chromedriver(version: str) -> tuple[requests.Response, int]:
 
     return res, int(content_length)
 
-    # content_length = res.headers.get("content-length")
-    # now_content_length = 0
-    # with open("geetest/chromedriver.zip", "wb") as f:
-    #     for content in res.iter_content(4096):
-    #         f.write(content)
-    #         now_content_length += len(content)
-    #         print(f"正在下载:{now_content_length}/{content_length}")
-    # f.close()
-    #
-    # file = zipfile.ZipFile(os.path.abspath("geetest/chromedriver.zip"))
-    # print('开始解压文件')
-    #
-    # file.extractall(os.path.abspath("geetest/"))
-    # file.close()
-    #
-    # print("自动更新完成")
-    #
-    # return os.path.abspath("geetest/chromedriver.exe")
-
 
 def get_chromedriver_list() -> list[str]:
     """ 获取版本列表 """
