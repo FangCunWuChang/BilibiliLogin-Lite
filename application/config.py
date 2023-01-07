@@ -1,4 +1,3 @@
-import application.config
 from application.utils import reader
 
 from application.items import (
