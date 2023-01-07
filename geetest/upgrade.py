@@ -10,6 +10,7 @@ from application.net.utils import (
     get_chromedriver_list, download_chromedriver
 )
 from application.errors import ChromedriverUpgradeError
+from application.config import chromedriver_file
 
 
 def searchVersions(version: list, chromedriver_list: list):
@@ -46,7 +47,7 @@ def updateVersions():
 def init_chromedriver():
     """ 尝试打开chromedriver """
     try:
-        service = Service(os.path.abspath("geetest/chromedriver.exe"))
+        service = Service(os.path.abspath(chromedriver_file))
         driver = webdriver.Chrome(service=service)
     except Exception as msg:
         ver = re.search(r'browser version is (.+) with', str(msg))

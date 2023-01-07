@@ -1,5 +1,5 @@
 from application.module.decoration import application_error
-
+from application.config import chromedriver_file
 from application.utils import urlQuerySplit
 
 from selenium.webdriver.chrome.service import Service
@@ -30,7 +30,7 @@ class GeeTest(object):
         """ 还得是selenium """
         super(GeeTest, self).__init__()
 
-        service = Service(os.path.abspath("geetest/chromedriver.exe"))
+        service = Service(os.path.abspath(chromedriver_file))
         self.driver = webdriver.Chrome(service=service)
         gee_html = os.path.abspath("./geetest/template/index.html")
         self.driver.get(gee_html + f"?gt={gt}&challenge={challenge}")

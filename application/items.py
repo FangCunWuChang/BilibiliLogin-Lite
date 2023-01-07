@@ -1,9 +1,57 @@
 import tkinter
 
 
-from application.config import (
-    EntryConfig, ButtonConfig, LabelConfig
-)
+class AppConfig(object):
+    """ ui基础设置 """
+    def __init__(self, title: str, bg: str, resizable: bool, geometry: str):
+        self.title, self.bg, self.geometry = title, bg, geometry
+        self.resizable = (resizable, resizable)
+
+
+class Place(object):
+    """ 位置 """
+    def __init__(self, w: int, h: int, x: int, y: int):
+        super(Place, self).__init__()
+        self.width, self.height, self.x, self.y = w, h, x, y
+
+
+class ButtonConfig(object):
+    """ 按钮设置 """
+    def __init__(self, text: str, font: tuple[str, int], **kwargs):
+        super(ButtonConfig, self).__init__()
+
+        self.place = Place(**kwargs).__dict__
+        self.text, self.font = text, font
+
+    @property
+    def content(self):
+        return {"text": self.text, "font": self.font}
+
+
+class EntryConfig(object):
+    """ 输入框设置 """
+    def __init__(self, default: str | None, font: tuple[str, int], **kwargs):
+        super(EntryConfig, self).__init__()
+
+        self.place = Place(**kwargs).__dict__
+        self.default, self.font = default, font
+
+    @property
+    def content(self):
+        return {"font": self.font}
+
+
+class LabelConfig(object):
+    """ 标签设置 """
+    def __init__(self, text: str, font: tuple[str, int], **kwargs):
+        super(LabelConfig, self).__init__()
+
+        self.place = Place(**kwargs).__dict__
+        self.text, self.font = text, font
+
+    @property
+    def content(self):
+        return {"text": self.text, "font": self.font}
 
 
 class TkinterEntry(tkinter.Entry):

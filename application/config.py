@@ -1,52 +1,11 @@
 from application.utils import reader
 
-
-class AppConfig(object):
-    def __init__(self, title: str, bg: str, resizable: bool, geometry: str):
-        self.title, self.bg, self.geometry = title, bg, geometry
-        self.resizable = (resizable, resizable)
-
-
-class Place(object):
-    def __init__(self, w: int, h: int, x: int, y: int):
-        super(Place, self).__init__()
-        self.width, self.height, self.x, self.y = w, h, x, y
-
-
-class ButtonConfig(object):
-    def __init__(self, text: str, font: tuple[str, int], **kwargs):
-        super(ButtonConfig, self).__init__()
-
-        self.place = Place(**kwargs).__dict__
-        self.text, self.font = text, font
-
-    @property
-    def content(self):
-        return {"text": self.text, "font": self.font}
-
-
-class EntryConfig(object):
-    def __init__(self, default: str | None, font: tuple[str, int], **kwargs):
-        super(EntryConfig, self).__init__()
-
-        self.place = Place(**kwargs).__dict__
-        self.default, self.font = default, font
-
-    @property
-    def content(self):
-        return {"font": self.font}
-
-
-class LabelConfig(object):
-    def __init__(self, text: str, font: tuple[str, int], **kwargs):
-        super(LabelConfig, self).__init__()
-
-        self.place = Place(**kwargs).__dict__
-        self.text, self.font = text, font
-
-    @property
-    def content(self):
-        return {"text": self.text, "font": self.font}
+from application.items import (
+    AppConfig,
+    ButtonConfig,
+    LabelConfig,
+    EntryConfig
+)
 
 
 font_0 = ("Microsoft YaHei", 14)
@@ -123,6 +82,7 @@ default_net_config = reader("./settings/net/default.json")
 chromedriver_index_url = "https://registry.npmmirror.com/-/binary/chromedriver/"
 chromedriver_download_url = "https://cdn.npmmirror.com/binaries/chromedriver/{VERSION}/chromedriver_win32.zip"
 
+chromedriver_file = "geetest/chromedriver.exe"
 
 # 登陆所需密钥
 LOGIN_SIGN_Android = ("783bbb7264451d82", "2653583c8873dea268ab9386918b1d65")
