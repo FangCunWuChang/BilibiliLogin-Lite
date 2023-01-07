@@ -5,8 +5,10 @@ from application.errors import (
     CidFormatError,
     VerifyCodeFormatError
 )
-from application.items import TkinterButton
-from application.config import ButtonConfig
+from application.items import (
+    TkinterButton,
+    ButtonConfig
+)
 
 
 class ButtonCommand(object):

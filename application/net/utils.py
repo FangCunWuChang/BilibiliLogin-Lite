@@ -1,6 +1,5 @@
-import os
-import zipfile
 import hashlib
+import requests
 from urllib.parse import urlencode
 
 from application.net.session import Session
@@ -44,31 +43,35 @@ def get_versions(mod: str = "android") -> tuple[str, str]:
     return code, name
 
 
-def download_chromedriver(version: str):
+def download_chromedriver(version: str) -> tuple[requests.Response, int]:
     """ 下载对应版本chromedriver """
 
     url = chromedriver_download_url.format(VERSION=version)
 
     with Session(**default_net_config) as session:
-        res = session.request("GET", url)
+        res = session.request("GET", url, stream=True)
     content_length = res.headers.get("content-length")
-    now_content_length = 0
-    with open("geetest/chromedriver.zip", "wb") as f:
-        for content in res.iter_content(4096):
-            f.write(content)
-            now_content_length += len(content)
-            print(f"正在下载:{now_content_length}/{content_length}")
-    f.close()
 
-    file = zipfile.ZipFile(os.path.abspath("geetest/chromedriver.zip"))
-    print('开始解压文件')
+    return res, int(content_length)
 
-    file.extractall(os.path.abspath("geetest/"))
-    file.close()
-
-    print("自动更新完成")
-
-    return os.path.abspath("geetest/chromedriver.exe")
+    # content_length = res.headers.get("content-length")
+    # now_content_length = 0
+    # with open("geetest/chromedriver.zip", "wb") as f:
+    #     for content in res.iter_content(4096):
+    #         f.write(content)
+    #         now_content_length += len(content)
+    #         print(f"正在下载:{now_content_length}/{content_length}")
+    # f.close()
+    #
+    # file = zipfile.ZipFile(os.path.abspath("geetest/chromedriver.zip"))
+    # print('开始解压文件')
+    #
+    # file.extractall(os.path.abspath("geetest/"))
+    # file.close()
+    #
+    # print("自动更新完成")
+    #
+    # return os.path.abspath("geetest/chromedriver.exe")
 
 
 def get_chromedriver_list() -> list[str]:
@@ -76,17 +79,16 @@ def get_chromedriver_list() -> list[str]:
     with Session(**default_net_config) as session:
         res = session.request("GET", chromedriver_index_url)
     chromedriver_names = [i["name"] for i in res.json()]
+    chromedriver_list = [i[:-1] for i in chromedriver_names]
 
-    chromedriver_list = list()
-    for name in chromedriver_names:
-        if name[-1] == "/":
-            name = name.replace("/", "")
-        chromedriver_list.append(name)
-
-    return_list = list()
+    versions = list()
     for i in chromedriver_list:
         version_list = i.split(".")
+        if len(version_list) != 4:
+            continue
         if all([ii.isdigit() for ii in version_list]):
-            return_list.append(i)
+            versions.append(i)
 
-    return return_list
+    versions.sort(key=lambda x: tuple(int(v) for v in x.split(".")))
+
+    return versions

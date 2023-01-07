@@ -7,8 +7,7 @@ from application.items import (
     TkinterLabel
 )
 from application.config import (
-    AppConfig, EntryConfig, LabelConfig,
-    ButtonConfig, config_base_app,
+    config_base_app,
     config_controls_app_SmsLogin_button,
     config_controls_app_PasswordLogin_button,
     config_controls_app_SettingDevice_button
@@ -17,6 +16,12 @@ from application.module.command.app import (
     AppCommandSmsLogin,
     AppCommandPasswordLogin,
     AppCommandDeviceSetting
+)
+from application.items import (
+    ButtonConfig,
+    LabelConfig,
+    AppConfig,
+    EntryConfig
 )
 
 

@@ -1,4 +1,5 @@
 import tkinter
+from tkinter.ttk import Progressbar
 
 
 class AppConfig(object):
@@ -52,6 +53,15 @@ class LabelConfig(object):
     @property
     def content(self):
         return {"text": self.text, "font": self.font}
+
+
+class ProgressbarConfig(object):
+    """ 进度条设置 """
+    def __init__(self, maximum: int, init: int, **kwargs):
+        super(ProgressbarConfig, self).__init__()
+
+        self.maximum, self.value = maximum, init
+        self.place = Place(**kwargs).__dict__
 
 
 class TkinterEntry(tkinter.Entry):
@@ -108,3 +118,17 @@ class TkinterButton(tkinter.Button):
         root_config.update({"command": func})
         super(TkinterButton, self).__init__(root, **root_config)
         self.place(**config.place)
+
+
+class TkinterProgressbar(Progressbar):
+    """ 进度条 """
+    def __init__(self, root, config: ProgressbarConfig):
+        super(TkinterProgressbar, self).__init__(root)
+
+        self["value"] = config.value
+        self["maximum"] = config.maximum
+
+        self.place(**config.place)
+
+    def up(self, value: int):
+        self["value"] = value

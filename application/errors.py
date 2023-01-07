@@ -55,22 +55,8 @@ class GuiFileAskWarning(Warning):
         self.title = "[警告]未打开文件会话"
 
 
-class SdkIntIndexError(Exception):
-    """ [错误]无法找到对应的SdkInt"""
-    def __init__(self, *args: object):
-        super(SdkIntIndexError, self).__init__(*args)
-        self.title = "[错误]无法找到对应的SdkInt"
-
-
 class ResponseError(Exception):
     """ [错误]响应错误 """
     def __init__(self, *args: object):
         super(ResponseError, self).__init__(*args)
         self.title = "[错误]响应错误"
-
-
-class ChromedriverUpgradeError(Exception):
-    """ [错误]chromedriver自动更新错误 """
-    def __init__(self, *args):
-        super(ChromedriverUpgradeError, self).__init__(*args)
-        self.title = "[错误]chromedriver自动更新错误"

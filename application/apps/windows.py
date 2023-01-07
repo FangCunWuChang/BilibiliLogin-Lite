@@ -1,5 +1,5 @@
 from application.apps.utils import TopWindow
-from application.config import AppConfig
+from application.items import AppConfig
 
 
 class SmsLoginWindow(TopWindow):

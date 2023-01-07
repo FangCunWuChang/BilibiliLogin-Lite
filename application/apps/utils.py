@@ -9,18 +9,50 @@ from application.module.decoration import (
     application_thread,
     application_error
 )
-from application.config import (
+from application.items import (
     AppConfig,
     ButtonConfig,
     EntryConfig,
     LabelConfig,
-    font_1
+    ProgressbarConfig
 )
 from application.items import (
     TkinterEntry,
     TkinterLabel,
-    TkinterButton
+    TkinterButton,
+    TkinterProgressbar
 )
+from application.net.utils import download_chromedriver
+from application.config import font_1
+
+
+class ProgressWindow(tkinter.Tk):
+    """ chromedriver下载进度窗口 """
+    def __init__(self, version: str):
+        super(ProgressWindow, self).__init__()
+        self.title("download chromedriver.exe")
+        self.configure(background="#f0f0f0")
+        self.resizable(False, False)
+        self.geometry("300x50")
+        config = ProgressbarConfig(100, 0, w=280, h=30, x=10, y=10)
+        self.progressbar = TkinterProgressbar(self, config)
+        self.func(version)
+        self.chromedriver_file_zip = None
+
+    @application_thread
+    @application_error
+    def func(self, version: str):
+        res, length = download_chromedriver(version)
+        content_length = 0
+        self.chromedriver_file_zip = "./chromedriver.zip"
+        with open(self.chromedriver_file_zip, "wb") as f:
+            for content in res.iter_content(1024):
+                f.write(content)
+                content_length += len(content)
+                self.progressbar.up(content_length)
+        f.close()
+        self.destroy()
+        res.close()
 
 
 class InputWindow(tkinter.Tk):
