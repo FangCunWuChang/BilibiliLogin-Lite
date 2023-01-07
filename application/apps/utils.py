@@ -51,8 +51,8 @@ class ProgressWindow(tkinter.Tk):
                 content_length += len(content)
                 self.progressbar.up(content_length)
         f.close()
-        self.destroy()
         res.close()
+        self.destroy()
 
 
 class InputWindow(tkinter.Tk):
