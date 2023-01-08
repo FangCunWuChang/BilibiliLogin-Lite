@@ -14,7 +14,7 @@ import os
 class GeeTestContent(object):
     def __init__(self, gee_response_json: dict):
         """ 代替原有gee_values """
-        self.gee_challenge = gee_response_json["gee_challenge"]
+        self.gee_challenge = gee_response_json["geetest_challenge"]
         self.gee_seccode = gee_response_json["geetest_seccode"]
         self.gee_validate = gee_response_json["geetest_validate"]
         self.recaptcha_token = gee_response_json["recaptcha_token"]
