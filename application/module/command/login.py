@@ -42,6 +42,8 @@ class SmsLoginCommandSendVerifyCode(ButtonCommand):
     @application_thread
     @application_error
     def func(self):
+        print(self.__class__)
+
         tel_number = get_tel_number(root=self.root)
         cid_number = get_cid_number(root=self.root)
 
@@ -64,7 +66,8 @@ class SmsLoginCommandSendVerifyCode(ButtonCommand):
             showinfo("提示", "完成人机验证以继续")
 
             gee = GeeTest(query_dict["gee_gt"], query_dict["gee_challenge"])
-            gee_verify = gee.waitFinishing(time_sleep=1)
+            gee_verify: dict = gee.waitFinishing(time_sleep=1)
+            gee_verify.update({"recaptcha_token": query_dict["recaptcha_token"]})
 
             gee_content = GeeTestContent(gee_verify)
             tel_and_cid_gee = (cid_number, tel_number, gee_content)
@@ -89,6 +92,8 @@ class SmsLoginCommandLoginSms(ButtonCommand):
     @application_thread
     @application_error
     def func(self):
+        print(self.__class__)
+
         tel_number = get_tel_number(root=self.root)
         cid_number = get_cid_number(root=self.root)
         verify_code = get_verify_code(root=self.root)
@@ -123,6 +128,8 @@ class PasswordLoginCommandOauth2(ButtonCommand):
     @application_thread
     @application_error
     def func(self):
+        print(self.__class__)
+
         username = self.root["username_entry"].value()
         password = self.root["password_entry"].value()
 

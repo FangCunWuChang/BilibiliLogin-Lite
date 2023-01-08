@@ -17,6 +17,8 @@ class DeviceSettingCommandRandom(ButtonCommand):
     @application_thread
     @application_error
     def func(self):
+        print(self.__class__)
+
         random_text = str(uuid.uuid4()).replace("-", "")
         while len(random_text) < 35:
             random_text += str(uuid.uuid4()).replace("-", "")
@@ -33,6 +35,8 @@ class DeviceSettingCommandApply(ButtonCommand):
     @application_thread
     @application_error
     def func(self):
+        print(self.__class__)
+
         device_content = dict({
             "BilibiliBuvid": self.root["BilibiliBuvid_entry"].value(),
             "AndroidModel": self.root["AndroidModel_entry"].value(),

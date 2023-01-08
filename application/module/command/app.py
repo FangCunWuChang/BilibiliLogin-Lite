@@ -72,6 +72,8 @@ class AppCommandSmsLogin(ButtonCommand):
     @application_thread
     @application_error
     def func(self):
+        print(self.__class__)
+
         device = get_all_device_value(self.root)
         app = SmsLoginWindow(config_base_SmsLogin, device)
         app.loadLabel(config_controls_SmsLogin_cid_label)
@@ -91,6 +93,8 @@ class AppCommandPasswordLogin(ButtonCommand):
     @application_thread
     @application_error
     def func(self):
+        print(self.__class__)
+
         device = get_all_device_value(self.root)
         app = PasswordLoginWindow(config_base_PasswordLogin, device)
         app.loadLabel(config_controls_PasswordLogin_password_label)
@@ -107,6 +111,8 @@ class AppCommandDeviceSetting(ButtonCommand):
     @application_thread
     @application_error
     def func(self):
+        print(self.__class__)
+
         app = DeviceSettingWindow(config_base_DeviceSetting)
         app.loadLabel(config_controls_DeviceSetting_buvid_label)
         app.loadLabel(config_controls_DeviceSetting_code_label)
