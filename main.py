@@ -6,6 +6,5 @@ if __name__ == '__main__':
     if sys.argv[-1] != "-disableUpgradeChromedriver":
         upgradeChromedriver()
 
-    from application.apps.app import app as main_app
-
-    main_app.mainloop()
+    from application.apps.app import load_app
+    load_app().mainloop()
