@@ -1,4 +1,5 @@
 import tkinter
+import time
 
 from application.errors import (
     GuiItemNotExist,
@@ -27,29 +28,39 @@ from application.config import font_1
 
 
 class ProgressWindow(tkinter.Tk):
-    """ chromedriver下载进度窗口 """
     def __init__(self, version: str):
         super(ProgressWindow, self).__init__()
+
         self.title("download chromedriver.exe")
         self.configure(background="#f0f0f0")
         self.resizable(False, False)
         self.geometry("300x50")
+
         config = ProgressbarConfig(100, 0, w=280, h=30, x=10, y=10)
         self.progressbar = TkinterProgressbar(self, config)
+
+        self.chromedriver_file_zip = "./chromedriver.zip"
+
         self.func(version)
-        self.chromedriver_file_zip = None
+
+    def wait_show(self, t: int = 10):
+        while not self.winfo_exists():
+            time.sleep(t / 1000)
 
     @application_thread
     @application_error
-    def func(self, version: str):
+    def func(self, version: str) -> None:
+        self.wait_show()
+
         res, length = download_chromedriver(version)
         content_length = 0
-        self.chromedriver_file_zip = "./chromedriver.zip"
         with open(self.chromedriver_file_zip, "wb") as f:
             for content in res.iter_content(1024):
                 f.write(content)
                 content_length += len(content)
-                self.progressbar.up(content_length)
+
+                up_length = round(content_length / length * 100)
+                self.progressbar.up(up_length)
         f.close()
         res.close()
         self.destroy()

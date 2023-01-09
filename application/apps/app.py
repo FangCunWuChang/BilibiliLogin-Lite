@@ -2,22 +2,10 @@ import tkinter
 
 from application.utils import read_device_content
 from application.errors import GuiItemNotExist
+from application.config import font_0
 from application.items import (
     TkinterEntry,
-    TkinterLabel
-)
-from application.config import (
-    config_base_app,
-    config_controls_app_SmsLogin_button,
-    config_controls_app_PasswordLogin_button,
-    config_controls_app_SettingDevice_button
-)
-from application.module.command.app import (
-    AppCommandSmsLogin,
-    AppCommandPasswordLogin,
-    AppCommandDeviceSetting
-)
-from application.items import (
+    TkinterLabel,
     ButtonConfig,
     LabelConfig,
     AppConfig,
@@ -55,16 +43,26 @@ class App(tkinter.Tk):
         TkinterLabel(self, config=config)
 
 
-device_content = read_device_content()
+def load_app() -> App:
+    """ 加载应用 """
+    app = App(AppConfig("登陆", "#f0f0f0", False, "200x130"))
 
-app = App(config_base_app)
+    device_content = read_device_content()
 
-app["Device_BilibiliBuvid"] = device_content.get("BilibiliBuvid", "")
-app["Device_AndroidModel"] = device_content.get("AndroidModel", "")
-app["Device_AndroidBuild"] = device_content.get("AndroidBuild", "")
-app["Device_VersionName"] = device_content.get("VersionName", "")
-app["Device_VersionCode"] = device_content.get("VersionCode", "")
+    app["Device_BilibiliBuvid"] = device_content.get("BilibiliBuvid", "")
+    app["Device_AndroidModel"] = device_content.get("AndroidModel", "")
+    app["Device_AndroidBuild"] = device_content.get("AndroidBuild", "")
+    app["Device_VersionName"] = device_content.get("VersionName", "")
+    app["Device_VersionCode"] = device_content.get("VersionCode", "")
 
-app.loadButton(AppCommandSmsLogin, config_controls_app_SmsLogin_button)
-app.loadButton(AppCommandPasswordLogin, config_controls_app_PasswordLogin_button)
-app.loadButton(AppCommandDeviceSetting, config_controls_app_SettingDevice_button)
+    from application.module.command.app import (
+        AppCommandSmsLogin as Func4SmsLogin,
+        AppCommandPasswordLogin as Func4PasswordLogin,
+        AppCommandDeviceSetting as Func4DeviceSetting
+    )
+
+    app.loadButton(Func4SmsLogin, ButtonConfig("短信登陆", font_0, w=180, h=30, x=10, y=10))
+    app.loadButton(Func4PasswordLogin, ButtonConfig("账密登陆", font_0, w=180, h=30, x=10, y=50))
+    app.loadButton(Func4DeviceSetting, ButtonConfig("设备信息", font_0, w=180, h=30, x=10, y=90))
+
+    return app
