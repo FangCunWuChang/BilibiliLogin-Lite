@@ -10,7 +10,6 @@ from selenium.webdriver.chrome.service import Service
 from application.net.utils import get_chromedriver_list
 from application.apps.utils import ProgressWindow
 from application.config import chromedriver_file
-from application.message import askyesno
 
 
 def extract_chromedriver(chromedriver_file_zip: str) -> bool:
@@ -88,8 +87,7 @@ def upgradeChromedriver() -> None:
     for _ in range(8):
         chromedriver_state = init_chromedriver()
         if chromedriver_state is None:
-            if askyesno("跳转", "未找到Chrome, 是否前往下载?"):
-                webbrowser.open("https://www.google.cn/chrome/")
+            webbrowser.open("https://www.google.cn/chrome/")
             sys.exit("未找到Chrome[https://www.google.cn/chrome/]")
         elif chromedriver_state is True:
             print("无需更新")
