@@ -24,7 +24,9 @@ def download_window(version: str) -> str:
     """ 打开下载窗口 """
     root = ProgressWindow(version)
     root.mainloop()
-    return root.chromedriver_file_zip
+    file_zip = root.chromedriver_file_zip
+    del root
+    return file_zip
 
 
 def contrastVersion(current: str, expected: str) -> list[float]:

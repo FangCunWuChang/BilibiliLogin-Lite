@@ -199,6 +199,7 @@ class PasswordLoginCommandOauth2(ButtonCommand):
                 input_app = InputWindow()
                 input_app.mainloop()
                 args = (tmp_code, captcha_key, input_app.verify_code)
+                del input_app
                 if "request_id" in verify_query:
                     req = {"request_id": verify_query["request_id"]}
                     login_response = bilibili_login.tel_verify(*args, **req)
