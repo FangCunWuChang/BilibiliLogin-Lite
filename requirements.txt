@@ -1,4 +1,3 @@
 requests
 rsa
 selenium
-pyinstaller
